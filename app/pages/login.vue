@@ -4,7 +4,7 @@
       <div class="mx-auto max-w-[60rem] px-4">
         <div class="flex min-h-screen items-center justify-center py-10">
           <div class="w-full max-w-md">
-            
+
             <div class="mb-6 text-center">
               <a href="#" class="inline-flex items-center gap-2">
                 <span class="grid h-9 w-9 place-content-center rounded-xl bg-ink text-white text-sm font-bold">W</span>
@@ -16,8 +16,8 @@
 
             <section class="rounded-xl border border-slate-200 p-5 shadow-sm bg-white">
               <button
-                @click=""
-                :disabled="false"
+                @click="signInWithGoogle"
+                :disabled="loading"
                 id="btn-google"
                 class="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium hover:bg-slate-50 disabled:opacity-70"
               >
@@ -29,10 +29,11 @@
                 <div class="h-px flex-1 bg-slate-200"></div><span>OR</span><div class="h-px flex-1 bg-slate-200"></div>
               </div>
 
-              <form @submit.prevent="" class="space-y-2" novalidate>
+              <form @submit.prevent="signInWithMagicLink" class="space-y-2" novalidate>
                 <label for="email" class="block text-xs font-medium text-slate-700">Email</label>
                 <div class="relative">
                   <input
+                    v-model="email"
                     id="email"
                     name="email"
                     type="email"
@@ -47,11 +48,11 @@
 
                 <button
                   type="submit"
-                  :disabled="false"
+                  :disabled="loading"
                   class="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-lg bg-ink px-3 py-2 text-sm font-medium text-white hover:opacity-95 disabled:opacity-70"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-4 w-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16.5 12a4.5 4.5 0 10-9 0v3h9v-3Z M3 9l9 6 9-6"/></svg>
-                  <span>Send magic link</span>
+                  <span>{{ loading ? 'Sending...' : 'Send magic link' }}</span>
                 </button>
               </form>
 
@@ -63,7 +64,6 @@
         </div>
       </div>
     </main>
-    
     </div>
 </template>
 
@@ -71,4 +71,62 @@
 definePageMeta({
   layout: 'auth'
 })
+
+const supabase = useSupabaseClient()
+const { showToast } = useToast()
+const loading = ref(false)
+const email = ref('')
+const router = useRouter() // <- Thêm dòng này
+
+// Lấy redirect URL từ config hoặc đặt cứng
+// Đảm bảo URL này khớp với cấu hình trong nuxt.config.ts và Supabase Dashboard
+const redirectUrl = useRuntimeConfig().public.baseUrl
+  ? `${useRuntimeConfig().public.baseUrl}/auth/callback`
+  : 'http://localhost:3000/auth/callback';
+
+
+// --- Login với Google ---
+const signInWithGoogle = async () => {
+  loading.value = true
+  const { error, data } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: redirectUrl // Sử dụng redirectUrl đã cập nhật
+    }
+  })
+  if (error) {
+    showToast(`Error: ${error.message}`)
+    loading.value = false
+  }
+  // Supabase xử lý redirect qua server route, không cần làm gì thêm ở client
+}
+
+// --- Login với Magic Link ---
+const signInWithMagicLink = async () => {
+  if (!email.value) {
+    showToast('Please enter your email address.')
+    return
+  }
+  loading.value = true
+  const { error } = await supabase.auth.signInWithOtp({
+    email: email.value,
+    options: {
+      emailRedirectTo: redirectUrl // Sử dụng redirectUrl đã cập nhật
+    }
+  })
+  if (error) {
+    showToast(`Error: ${error.message}`)
+  } else {
+    showToast('Check your email for the magic link!')
+    email.value = '' // Xóa email sau khi gửi thành công
+  }
+  loading.value = false
+}
+
+// Kiểm tra nếu đã login thì redirect về dashboard (phòng trường hợp vào lại trang login)
+const user = useSupabaseUser()
+if (user.value) {
+  router.replace('/dashboard') // Dùng replace để không lưu trang login vào history
+}
+
 </script>
