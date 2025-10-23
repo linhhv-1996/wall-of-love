@@ -1,43 +1,51 @@
-// composables/useToast.ts
-import { ref, readonly } from 'vue'
+// composables/useToast.ts (ĐÃ SỬA LỖI CONTEXT)
 
-interface Toast {
-  id: number
-  message: string
-  type: 'success' | 'error'
-  duration?: number
+import { type Ref } from 'vue'
+
+// 1. Tạo biến cache (singleton) ở top-level,
+//    NHƯNG để là null.
+let toastMessageState: Ref<string> | null = null
+let toastTimer: any = null
+
+// 2. Hàm helper để lấy (hoặc tạo) state
+function getToastState() {
+  // 3. Chỉ khi state chưa tồn tại...
+  if (!toastMessageState) {
+    // 4. ...THÌ MỚI GỌI useState()
+    //    (Lúc này nó được gọi TỪ BÊN TRONG 
+    //     useToast/useToastState, nên đã có context)
+    toastMessageState = useState<string>('toastMessage', () => '')
+  }
+  return toastMessageState
 }
 
-const toasts = ref<Toast[]>([])
+/**
+ * Composable DÙNG ĐỂ GỌI (SHOW) TOAST.
+ * (Dùng trong pages/login.vue)
+ */
+export const useToast = () => {
+  // 5. Lấy state (hoặc tạo mới nếu là lần đầu)
+  const state = getToastState()
 
-let toastId = 0
-
-export function useToast() {
-  const showToast = (toast: { message: string, type?: 'success' | 'error', duration?: number }) => {
-    const id = toastId++
-    const newToast: Toast = {
-      id,
-      message: toast.message,
-      type: toast.type || 'success',
-      duration: toast.duration || 3000
-    }
-    toasts.value.push(newToast)
-
-    setTimeout(() => {
-      removeToast(id)
-    }, newToast.duration)
+  const showToast = (msg: string, duration: number = 2500) => {
+    state.value = msg
+    clearTimeout(toastTimer)
+    toastTimer = setTimeout(() => {
+      state.value = ''
+    }, duration)
   }
+  
+  return { showToast }
+}
 
-  const removeToast = (id: number) => {
-    const index = toasts.value.findIndex(t => t.id === id)
-    if (index !== -1) {
-      toasts.value.splice(index, 1)
-    }
-  }
+/**
+ * Composable DÙNG ĐỂ ĐỌC (DISPLAY) STATE.
+ * (Dùng trong components/GlobalToast.vue)
+ */
+export const useToastState = () => {
+  // 5. Lấy state (hoặc tạo mới nếu là lần đầu)
+  const state = getToastState()
 
-  return {
-    toasts: readonly(toasts),
-    showToast,
-    removeToast
-  }
+  // 6. Trả về
+  return readonly(state)
 }

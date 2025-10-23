@@ -1,116 +1,74 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Sign in to your account
-      </h2>
-    </div>
+  <div class="min-h-screen text-slate-800 flex flex-col">
+    <main class="flex-1">
+      <div class="mx-auto max-w-[60rem] px-4">
+        <div class="flex min-h-screen items-center justify-center py-10">
+          <div class="w-full max-w-md">
+            
+            <div class="mb-6 text-center">
+              <a href="#" class="inline-flex items-center gap-2">
+                <span class="grid h-9 w-9 place-content-center rounded-xl bg-ink text-white text-sm font-bold">W</span>
+                <span class="text-sm font-semibold tracking-tight">Wall of Love</span>
+              </a>
+              <h1 class="mt-4 text-xl font-bold text-ink">Sign in to your account</h1>
+              <p class="mt-1 text-sm text-slate-600">Choose Google or get a magic link via email.</p>
+            </div>
 
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <div>
-          <p class="text-sm font-medium text-gray-700">Sign in with</p>
-          <div class="mt-1 grid grid-cols-1 gap-3">
-            <div>
+            <section class="rounded-xl border border-slate-200 p-5 shadow-sm bg-white">
               <button
-                @click="signInWithGoogle"
-                class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                @click=""
+                :disabled="false"
+                id="btn-google"
+                class="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium hover:bg-slate-50 disabled:opacity-70"
               >
-                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.736 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.03-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0020 10c0-5.523-4.477-10-10-10z" clip-rule="evenodd" />
-                </svg>
-                <span class="ml-2">Google</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="h-4 w-4" aria-hidden="true"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12 c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C33.05,6.053,28.761,4,24,4C12.955,4,4,12.955,4,24 s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657 C33.05,6.053,28.761,4,24,4C16.318,4,9.689,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c4.717,0,9.005-1.805,12.27-4.757l-5.657-5.657C28.566,35.091,26.392,36,24,36 c-5.202,0-9.619-3.317-11.283-7.946l-6.539,5.036C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.147-4.102,5.527l0.003-0.002l6.557,6.557 C36.621,40.621,44,36,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
+                <span>Continue with Google</span>
               </button>
-            </div>
+
+              <div class="my-4 flex items-center gap-3 text-[11px] text-slate-500">
+                <div class="h-px flex-1 bg-slate-200"></div><span>OR</span><div class="h-px flex-1 bg-slate-200"></div>
+              </div>
+
+              <form @submit.prevent="" class="space-y-2" novalidate>
+                <label for="email" class="block text-xs font-medium text-slate-700">Email</label>
+                <div class="relative">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    inputmode="email"
+                    placeholder="you@example.com"
+                    required
+                    class="w-full rounded-lg border border-slate-200 pl-3 pr-10 py-2 text-sm placeholder:text-slate-400 focus:ring-0 focus:outline-none focus:border-slate-400"
+                  >
+                  <svg class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M3 8l9 6 9-6"/></svg>
+                </div>
+                <p class="text-[11px] text-slate-500">We'll email you a secure link to sign in.</p>
+
+                <button
+                  type="submit"
+                  :disabled="false"
+                  class="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-lg bg-ink px-3 py-2 text-sm font-medium text-white hover:opacity-95 disabled:opacity-70"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-4 w-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16.5 12a4.5 4.5 0 10-9 0v3h9v-3Z M3 9l9 6 9-6"/></svg>
+                  <span>Send magic link</span>
+                </button>
+              </form>
+
+              <p class="mt-3 text-[11px] text-slate-500">By continuing, you agree to our <a href="#" class="underline underline-offset-2">Terms</a> and <a href="#" class="underline underline-offset-2">Privacy Policy</a>.</p>
+            </section>
+
+            <p class="mt-6 text-center text-xs text-slate-500">© 2025 Wall of Love</p>
           </div>
         </div>
-
-        <div class="mt-6 relative">
-          <div class="absolute inset-0 flex items-center" aria-hidden="true">
-            <div class="w-full border-t border-gray-300" />
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray-500">Or continue with</span>
-          </div>
-        </div>
-
-        <form class="mt-6 space-y-6" @submit.prevent="signInWithMagicLink">
-           <p v-if="magicLinkMessage" class="text-sm text-green-600">{{ magicLinkMessage }}</p>
-          <div>
-            <label for="email-magic" class="block text-sm font-medium text-gray-700">
-              Email address
-            </label>
-            <div class="mt-1">
-              <input v-model="email" id="email-magic" type="email" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-            </div>
-          </div>
-           <p v-if="errorMessage" class="text-sm text-red-600">{{ errorMessage }}</p>
-          <div>
-            <button type="submit" :disabled="loading" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400">
-              {{ loading ? 'Sending...' : 'Send Magic Link' }}
-            </button>
-          </div>
-        </form>
       </div>
+    </main>
+    
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
-const email = ref('');
-const loading = ref(false);
-const errorMessage = ref<string | null>(null);
-const magicLinkMessage = ref<string | null>(null);
-
-const supabase = useSupabaseClient();
-const router = useRouter();
-
-// --- Social Login ---
-const signInWithGoogle = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-        redirectTo: `${window.location.origin}/confirm` // Quan trọng!
-    }
-  });
-  if (error) {
-    errorMessage.value = error.message;
-  }
-};
-
-// --- Magic Link Login ---
-const signInWithMagicLink = async () => {
-  try {
-    loading.value = true;
-    errorMessage.value = null;
-    magicLinkMessage.value = null;
-
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email.value,
-      options: {
-        // Link trong email sẽ trỏ về đây, sau đó Supabase sẽ xử lý session
-        // và chuyển hướng đến trang dashboard nhờ watchEffect
-        emailRedirectTo: `${window.location.origin}/confirm`,
-      }
-    });
-
-    if (error) {
-      errorMessage.value = error.message;
-    } else {
-      magicLinkMessage.value = 'Check your email for the magic link!';
-    }
-  } catch (error) {
-    errorMessage.value = 'An unexpected error occurred.';
-  } finally {
-    loading.value = false;
-  }
-};
-
-// --- Redirect user if already logged in ---
-const user = useSupabaseUser();
-watchEffect(() => {
-  if (user.value) {
-    router.push('/dashboard');
-  }
-});
+definePageMeta({
+  layout: 'auth'
+})
 </script>
